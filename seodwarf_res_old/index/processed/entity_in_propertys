@@ -1,0 +1,3 @@
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://www.w3.org/1999/02/22-rdf-syntax-ns#typeInv	http://seodwarf.eu/ontology/v1.0#hasOnlineResourceInv
+http://datacatalog.seo-dwarf.eu:8080/data/example_2D_region_turbitidy.json	http://seodwarf.eu/ontology/v1.0#hasOnlineResource
+http://seodwarf.eu/ontology/v1.0#Image	http://www.w3.org/1999/02/22-rdf-syntax-ns#type

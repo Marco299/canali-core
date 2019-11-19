@@ -8,7 +8,6 @@ package edu.ucla.cs.scai.canali.core.experiment.qald6;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

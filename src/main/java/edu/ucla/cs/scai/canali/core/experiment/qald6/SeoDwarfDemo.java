@@ -25,30 +25,30 @@ public class SeoDwarfDemo {
     public static void main(String[] args) {
 
         try {
-            File file = new File("./question.txt");
+           // File file = new File("./question.txt");
 
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            //BufferedReader br = new BufferedReader(new FileReader(file));
 
-            String st;
-            while ((st = br.readLine()) != null) {
+            String st = "What is the hasClass of POLYGON((6600170 4600247,608254 4599055,609997 4593754,603997 4593754,600170 4600247))?";
+
+            //String st = "What is the max turbidity of Cretan?";
+            //while ((st = br.readLine()) != null) {
                 System.out.println(st);
 
                 System.out.println("STRING:" + st);
-                QASystem qas = new CanaliW2VQASystem("seodwarf_res/abstract_200_20.w2v.bin", "seodwarf_res/index/supportFiles/property_labels");
-                //System.setProperty("kb.index.dir", "/home/lucia/nlp2sparql-data/dbpedia-processed/2015-10/dbpedia-processed_onlydbo_mini_e/index/"); //!!!
-                System.setProperty("kb.index.dir", "./seodwarf_res/index/processed/");
+                QASystem qas = new CanaliW2VQASystem("resource/seodwarf_res/abstract_200_20.w2v.bin", "resource/seodwarf_res/index/supportFiles/property_labels");
+                //QASystem qas = new CanaliW2VQASystem("/home/lucia/repo/canali-core/resource/seodwarf_res/abstract_200_20.w2v.bin", "/home/lucia/repo/canali-core/resource/seodwarf_res/index/supportFiles/property_labels");
 
+                //System.setProperty("kb.index.dir", "/home/lucia/nlp2sparql-data/dbpedia-processed/2015-10/dbpedia-processed_onlydbo_mini_e/index/"); //!!!
+                System.setProperty("kb.index.dir", "./resource/seodwarf_res/index/processed/");
+                //System.setProperty("kb.index.dir", "/home/lucia/repo/canali-core/resource/seodwarf_res/index/processed/");
                 ArrayList<String> systAns = new ArrayList<String>();
                 systAns = qas.getAnswer(st, null);
 
                 for (String a : systAns) {
                     System.out.println("System = " + a);
                 }
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(SeoDwarfDemo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SeoDwarfDemo.class.getName()).log(Level.SEVERE, null, ex);
+            //}
         } catch (Exception ex) {
             Logger.getLogger(SeoDwarfDemo.class.getName()).log(Level.SEVERE, null, ex);
         }

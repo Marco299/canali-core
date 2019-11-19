@@ -1,0 +1,55 @@
+-12748a11:167be0eb0f7:-7fad	http://seodwarf.eu/ontology/v1.0#hasTimestamp	2016-01-01^^xsd:long
+-12748a11:167be0eb0f7:-7fad	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	https://sweet.jpl.nasa.gov/sweet2.3/Time
+-12748a11:167be0eb0f7:-7fa8	http://seodwarf.eu/ontology/v1.0#hasUnit	MNU
+-12748a11:167be0eb0f7:-7fa8	http://seodwarf.eu/ontology/v1.0#hasClass	high
+POLYGON(685909_4598922,706449_4593754,707377_4533591,685909_459892)	http://seodwarf.eu/ontology/v1.0#hasClass	high
+-12748a11:167be0eb0f7:-7fa8	http://seodwarf.eu/ontology/v1.0#hasPhenomenonCoverage	POLYGON((685909 4598922,706449 4593754,707377 4533591,685909 4598922))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7fa8	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Turbidity
+-12748a11:167be0eb0f7:-7fab	http://seodwarf.eu/ontology/v1.0#hasUnit	MNU
+-12748a11:167be0eb0f7:-7fab	http://seodwarf.eu/ontology/v1.0#hasClass	medium
+-12748a11:167be0eb0f7:-7fab	http://seodwarf.eu/ontology/v1.0#hasPhenomenonCoverage	POLYGON((600170 4600247,608254 4599055,609997 4593754,603997 4593754,600170 4600247))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7fab	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Turbidity
+-12748a11:167be0eb0f7:-7fa6	http://seodwarf.eu/ontology/v1.0#hasUnit	MNU
+-12748a11:167be0eb0f7:-7fa6	http://seodwarf.eu/ontology/v1.0#hasClass	high
+-12748a11:167be0eb0f7:-7fa6	http://seodwarf.eu/ontology/v1.0#hasPhenomenonCoverage	POLYGON((685909 4598922,696775 4544192,676368 4562082,674778 4572419,685909 4598922))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7fa6	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Turbidity
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasMinTurbidity	39.0
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasImageCoverage	-12748a11:167be0eb0f7:-7fac
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasPhenomenon	-12748a11:167be0eb0f7:-7faa
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasPhenomenon	-12748a11:167be0eb0f7:-7fa6
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasAbstract	a41.52970649988813 17.182579397083796 41.44902275077671 17.152740019783725 41.30291879579901 17.09895927726999 41.15680465044324 17.045330836004418 41.01068497558364 16.991523582921367 40.864536315009246 16.937658538793816 40.718280884877615 16.884360107752542 40.57187578876498 16.832033708568346 40.54654721059926 16.82294887491277 40.55671174263467 16.181147928456813 41.545593768972765 16.198969614789704 41.52970649988813 17.182579397083796 41.52970649988813 17.182579397083796
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasResponsible	org_name
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasPhenomenon	-12748a11:167be0eb0f7:-7fa5
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasOnlineResource	seo:S2A_2017-08-13_T33TXF_TURB_DOGLIOTTI2015
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasOnlineResource	http://datacatalog.seo-dwarf.eu:8080/data/example_2D_region_turbitidy.json
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Image
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasLineage	missing
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasformat	raster^^http://www.w3.org/2001/xmlschema#string
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasPhenomenon	-12748a11:167be0eb0f7:-7fa8
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasCapturingDate	-12748a11:167be0eb0f7:-7fad
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasPhenomenon	-12748a11:167be0eb0f7:-7fa7
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasMaxTurbidity	210.0
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasPhenomenon	-12748a11:167be0eb0f7:-7fa9
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasMeanTurbidity	137.0
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasIdentifier	8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasTitle	S2A_MSIL1C_20170227T095021_N0204_R079_T33TXF_20170227T095613.SAFE
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://www.w3.org/2000/01/rdf-schema#label	ent1
+http://seodwarf.eu/ontology/v1.0#8cd321bf-c7c0-4a0f-bb09-cfc93bc7df99	http://seodwarf.eu/ontology/v1.0#hasPhenomenon	-12748a11:167be0eb0f7:-7fab
+-12748a11:167be0eb0f7:-7fa9	http://seodwarf.eu/ontology/v1.0#hasUnit	MNU
+-12748a11:167be0eb0f7:-7fa9	http://seodwarf.eu/ontology/v1.0#hasClass	medium
+-12748a11:167be0eb0f7:-7fa9	http://seodwarf.eu/ontology/v1.0#hasPhenomenonCoverage	POLYGON((621903 4576792,603997 4593754,614747 4578514,621903 4576792))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7fa9	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Turbidity
+-12748a11:167be0eb0f7:-7fac	http://seodwarf.eu/ontology/v1.0#hasBoundingBox	POLYGON ((16.181147928456813 40.54654721059926,17.182579397083796 40.54654721059926,17.182579397083796 41.545593768972765,16.181147928456813 41.545593768972765,16.181147928456813 40.54654721059926))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7fac	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#GeographicalCoordinates
+-12748a11:167be0eb0f7:-7fa7	http://seodwarf.eu/ontology/v1.0#hasUnit	MNU
+-12748a11:167be0eb0f7:-7fa7	http://seodwarf.eu/ontology/v1.0#hasClass	high
+-12748a11:167be0eb0f7:-7fa7	http://seodwarf.eu/ontology/v1.0#hasPhenomenonCoverage	POLYGON((685909 4598922,707377 4533591,696775 4544192,685909 4598922))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7fa7	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Turbidity
+-12748a11:167be0eb0f7:-7faa	http://seodwarf.eu/ontology/v1.0#hasUnit	MNU
+-12748a11:167be0eb0f7:-7faa	http://seodwarf.eu/ontology/v1.0#hasClass	low
+-12748a11:167be0eb0f7:-7faa	http://seodwarf.eu/ontology/v1.0#hasPhenomenonCoverage	POLYGON((625614 4593754,625614 4595344,633035 4578647,623897 4575201,621903 4576792,625614 4593754))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7faa	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Turbidity
+-12748a11:167be0eb0f7:-7fa5	http://seodwarf.eu/ontology/v1.0#hasUnit	MNU
+-12748a11:167be0eb0f7:-7fa5	http://seodwarf.eu/ontology/v1.0#hasClass	low
+-12748a11:167be0eb0f7:-7fa5	http://seodwarf.eu/ontology/v1.0#hasPhenomenonCoverage	POLYGON((674778 4572419,677560 4558239,663911 4559034,662719 4566720,666296 4572949,661658 4582490,666031 4585405,671067 4572286,674778 4572419))^^http://www.opengis.net/ont/geosparql#wktLiteral
+-12748a11:167be0eb0f7:-7fa5	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://seodwarf.eu/ontology/v1.0#Turbidity

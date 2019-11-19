@@ -288,8 +288,13 @@ public class AutocompleteW2VService {
 							} else {
 								remainder = queryWords.get(currentWordsUsed);
 							}
+                                                        
+                                                        System.out.println("partial query = " + partialQuery);
+                                                        System.out.println("partialQuery.length()= " + partialQuery.length());
+                                                        System.out.println(" queryWords.get(currentWordsUsed).length()=" + queryWords.get(currentWordsUsed).length());
 							partialQuery = partialQuery.substring(0, partialQuery.length() - queryWords.get(currentWordsUsed).length() - 1);
-							double oldSimilarity = res.get(0).similarity;
+                                                        System.out.println("partial query after= " + partialQuery);
+                                                        double oldSimilarity = res.get(0).similarity;
 							double maxSimilarity = oldSimilarity;
 							String lowerCasePartialQuery = partialQuery.toLowerCase();
 							for (AutocompleteObject a : res) {

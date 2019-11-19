@@ -1282,8 +1282,8 @@ public class BuildSeoDwarfIndex {
         } else {
             //fn1 = "/home/gaetangate/Dev/nlp2sparql-data/dbpedia-processed/2015-10/supportFiles/";
             //fn2 = "/home/gaetangate/Dev/nlp2sparql-data/dbpedia-processed/2015-10/index/";
-            fn1 = "/home/lucia/data/seodwarf/index/supportFiles/";
-            fn2 = "/home/lucia/data/seodwarf/index/processed/";
+            fn1 = "./resource/seodwarf_res/index/supportFiles/";
+            fn2 = "./resource/seodwarf_res/index/processed/";
         }
         long start = System.currentTimeMillis();
         System.out.println("BUILD MINI INDEX");

@@ -5,16 +5,20 @@
  */
 package di.uniba.it.nlpita.index.utils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.jena.ext.com.google.common.io.Files;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntProperty;
@@ -38,7 +42,7 @@ public class SeoDwarfIndex {
 
     String sourcePath;
     String outputPath;
-    OntModel dbpediaModel = ModelFactory.createOntologyModel(ProfileRegistry.OWL_DL_LANG);
+    OntModel seodwarfModel = ModelFactory.createOntologyModel(ProfileRegistry.OWL_DL_LANG);
 
     /**
      *
@@ -51,7 +55,7 @@ public class SeoDwarfIndex {
         this.sourcePath = sourceDir;
         this.outputPath = outputDir;
 
-        dbpediaModel.read(new FileReader(sourcePath + "SeoDwarf_v1.0_no_sweet_import.owl"), "RDF/XML");
+        seodwarfModel.read(new FileReader(sourcePath + "SeoDwarf_v1.0_no_sweet_import.owl"), "RDF/XML");
         System.out.println("SeoDwarf_v1.0_no_sweet_import.owl loaded successfully...");
     }
 
@@ -68,7 +72,7 @@ public class SeoDwarfIndex {
 
             PrintWriter out = new PrintWriter(new FileOutputStream(outputPath + "supportFiles/class_parents", false), true);
 
-            StmtIterator stmts = dbpediaModel.listStatements(null, RDFS.subClassOf, (RDFNode) null);
+            StmtIterator stmts = seodwarfModel.listStatements(null, RDFS.subClassOf, (RDFNode) null);
             while (stmts.hasNext()) {
                 Statement stmt = stmts.next();
                 out.println(stmt.getSubject() + "\t" + stmt.getObject());
@@ -93,16 +97,12 @@ public class SeoDwarfIndex {
 
             PrintWriter out = new PrintWriter(new FileOutputStream(outputPath + "supportFiles/class_labels", false), true);
 
-            ExtendedIterator<OntClass> ontClasses = dbpediaModel.listClasses();
+            ExtendedIterator<OntClass> ontClasses = seodwarfModel.listClasses();
             while (ontClasses.hasNext()) {
                 OntClass cls = ontClasses.next();
                 if (classes.contains(cls.getURI())) {
-                    // out.println(cls.getURI() + "\t" + URLDecoder.decode(StringEscapeUtils.unescapeJava(cls.getLabel("en")), "UTF-8"));
-                    if (cls.getURI().contains("seodwarf")) {
-                        out.println(cls.getURI() + "\t" + cls.getURI().split("#")[1]);
-                    } else {
-                        out.println(cls.getURI() + "\t" + cls.getURI().split("sweet2.3/")[1]); //!!! mettere label per tutte le classi !!!
-                    }
+                    out.println(cls.getURI() + "\t" + URLDecoder.decode(StringEscapeUtils.unescapeJava(cls.getLabel("en")), "UTF-8"));
+                    
                 }
             }
             out.close();
@@ -124,15 +124,20 @@ public class SeoDwarfIndex {
 
             PrintWriter out = new PrintWriter(new FileOutputStream(outputPath + "supportFiles/property_labels", false), true);
 
-            ExtendedIterator<OntProperty> props = dbpediaModel.listAllOntProperties(); //modified from CANaLI
+            ExtendedIterator<OntProperty> props = seodwarfModel.listAllOntProperties(); //modified from CANaLI
             while (props.hasNext()) {
                 OntProperty prop = props.next();
-                //if (prop.getURI().startsWith("http://dbpedia.org/ontology")){
-                //out.println(prop.getURI() + "\t" + StringEscapeUtils.unescapeJava(prop.getLabel("en")));
-                if (prop.getURI().contains("#")) {
-                    out.println(prop.getURI() + "\t" + prop.getURI().split("#")[1]);
+                System.out.println("prop:  " + prop.toString() + "  label: " + prop.getLabel("en"));
+                if (prop.getLabel("en") != null) {
+                    out.println(prop.getURI() + "\t" + prop.getLabel("en"));
                     properties.add(prop.getURI());
                 }
+                //if (prop.getURI().startsWith("http://dbpedia.org/ontology")){
+                //out.println(prop.getURI() + "\t" + StringEscapeUtils.unescapeJava(prop.getLabel("en")));
+//                if (prop.getURI().contains("#")) {
+//                    out.println(prop.getURI() + "\t" + prop.getURI().split("#")[1]);
+//                    properties.add(prop.getURI());
+//                }
                 //}
             }
 
@@ -161,23 +166,33 @@ public class SeoDwarfIndex {
 
             PrintWriter out = new PrintWriter(new FileOutputStream(outputPath + "supportFiles/entity_labels", false), true);
 
-            Model model = ModelFactory.createDefaultModel();
-            model.read(sourcePath + "Data_Turb_0_mod.rdf");
+            File dir = new File(sourcePath);
+            File[] directoryListing = dir.listFiles();
+            if (directoryListing != null) {
+                for (File child : directoryListing) {
+                    if (Files.getFileExtension(child.getAbsolutePath()).equals("rdf")) {
+                        Model model = ModelFactory.createDefaultModel();
+                        model.read(child.getAbsolutePath());
 
-            StmtIterator it = model.listStatements();
-            Statement stmt;
-            while (it.hasNext()) {
-                stmt = it.next();
-                Property p = stmt.getPredicate();
-                if (p.equals(RDFS.label)) {
-                    String subj = stmt.getSubject().toString().replace("seo:", "http://seodwarf.eu/ontology/v1.0#");
-                    out.println(subj + "\t" + stmt.getObject().toString());
-                    //out.println(stmt.getSubject() + "\t" + stmt.getObject().toString());
-                    System.out.println("*Inserting:" + stmt.getSubject().toString());
-                    entities.add(stmt.getSubject().toString());
+                        StmtIterator it = model.listStatements();
+                        Statement stmt;
+                        while (it.hasNext()) {
+                            stmt = it.next();
+                            Property p = stmt.getPredicate();
+                            if (p.equals(RDFS.label)) {
+                                String subj = stmt.getSubject().toString().replace("seo:", "http://seodwarf.eu/ontology/v1.0#");
+                                out.println(subj + "\t" + stmt.getObject().toString());
+                                //out.println(stmt.getSubject() + "\t" + stmt.getObject().toString());
+                                System.out.println("*Inserting:" + stmt.getSubject().toString());
+                                entities.add(stmt.getSubject().toString());
+
+                            }
+                        }
+                    }
                 }
             }
 
+        out.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SeoDwarfIndex.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -191,44 +206,32 @@ public class SeoDwarfIndex {
 
             PrintWriter out = new PrintWriter(new FileOutputStream(outputPath + "supportFiles/entity_classes", false), true);
 
-            Model model = ModelFactory.createDefaultModel();
-            model.read(sourcePath + "Data_Turb_0_mod.rdf");
+            File dir = new File(sourcePath);
+            File[] directoryListing = dir.listFiles();
+            if (directoryListing != null) {
+                for (File child : directoryListing) {
+                    if (Files.getFileExtension(child.getAbsolutePath()).equals("rdf")) {
+                        Model model = ModelFactory.createDefaultModel();
+                        model.read(child.getAbsolutePath());
 
-            StmtIterator it = model.listStatements();
-            Statement stmt;
-            while (it.hasNext()) {
-                stmt = it.next();
-                Resource subject = stmt.getSubject();
-                Property p = stmt.getPredicate();
-                RDFNode object = stmt.getObject();
+                        StmtIterator it = model.listStatements();
+                        Statement stmt;
+                        while (it.hasNext()) {
+                            stmt = it.next();
+                            Resource subject = stmt.getSubject();
+                            Property p = stmt.getPredicate();
+                            RDFNode object = stmt.getObject();
 
-                //System.out.println("looking for:" + object.toString());
+                            //System.out.println("looking for:" + object.toString());
+                            if (entities.contains(subject.toString()) && p.equals(RDF.type) && classes.contains(object.toString())) {
+                                out.println(stmt.getSubject() + "\t" + stmt.getObject().toString());
+                            }
 
-                if (entities.contains(subject.toString()) && p.equals(RDF.type) && classes.contains(object.toString())) {
-                    out.println(stmt.getSubject() + "\t" + stmt.getObject().toString());
+                        }
+                    }
                 }
-
             }
-
-//            BufferedReader in = new BufferedReader(new FileReader(sourcePath + "core-i18n/en/instance_types_en.ttl"));
-//            Pattern pattern = Pattern.compile("<(.*)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <(.*)>");
-//
-//            String l = in.readLine();
-//            //int n = 0; //!!! to remove
-//            while (l != null /*&& n < 1000*/) {
-//                //System.out.println(l);
-//                Matcher match = pattern.matcher(l);
-//                if (match.find()) {
-//                    String eUri = match.group(1);
-//                    String cUri = match.group(2);
-//                    if (entities.contains(eUri) && classes.contains(cUri)) {
-//                        out.println(eUri + "\t" + cUri);
-//                    }
-//                }
-//                l = in.readLine();
-//                //n++;
-//            }
-//            out.close();
+        out.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SeoDwarfIndex.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -261,71 +264,64 @@ public class SeoDwarfIndex {
 
         PrintWriter out = new PrintWriter(new FileOutputStream(outputPath + "supportFiles/triples", false), true);
 
-        Model model = ModelFactory.createDefaultModel();
-        model.read(sourcePath + "Data_Turb_0_mod.rdf");
+        File dir = new File(sourcePath);
+        File[] directoryListing = dir.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                if (Files.getFileExtension(child.getAbsolutePath()).equals("rdf")) {
+                    Model model = ModelFactory.createDefaultModel();
+                    model.read(child.getAbsolutePath());
 
-        StmtIterator it = model.listStatements();
-        Statement stmt;
-        while (it.hasNext()) {
-            stmt = it.next();
-            Resource s = stmt.getSubject();
-            String subj = s.toString().replace("seo:", "http://seodwarf.eu/ontology/v1.0#");
-            Property p = stmt.getPredicate();
-            RDFNode o = stmt.getObject();
-            String o_temp = o.toString().replaceAll("POLYGON\\(\\(\n          		", "POLYGON((");
-            System.out.println("REPLACED::" + o.toString().replaceAll("POLYGON\\(\\(\n          		", "POLYGON(("));
-            System.out.println("Triple:" + s.toString() + "\t" + p.toString() + "\t" + o_temp);
-            out.println(subj + "\t" + p.toString() + "\t" + o_temp);
-            //out.println(s.toString() + "\t" + p.toString() + "\t" + o_temp);
+                    StmtIterator it = model.listStatements();
+                    Statement stmt;
+                    while (it.hasNext()) {
+                        stmt = it.next();
+                        Resource s = stmt.getSubject();
+                        String subj = s.toString().replace("seo:", "http://seodwarf.eu/ontology/v1.0#");
+                        Property p = stmt.getPredicate();
+                        RDFNode o = stmt.getObject();
+
+                        String o_temp = o.toString().replaceAll("POLYGON\\(\\(\n          		", "POLYGON((");
+                        System.out.println("REPLACED::" + o.toString().replaceAll("POLYGON\\(\\(\n          		", "POLYGON(("));
+                        System.out.println("Triple:" + s.toString() + "\t" + p.toString() + "\t" + o_temp);
+                        out.println(subj + "\t" + p.toString() + "\t" + o_temp);
+                        //out.println(s.toString() + "\t" + p.toString() + "\t" + o_temp);
+                    }
+
+                }
+
+            }
+        } else {
+            // Handle the case where dir is not really a directory.
+            // Checking dir.isDirectory() above would not be sufficient
+            // to avoid race conditions with another process that deletes
+            // directories.
         }
-//        BufferedReader in = new BufferedReader(new FileReader(sourcePath + "core-i18n/en/mappingbased_literals_en.ttl"));
-//        String l = in.readLine();
-//        //int n = 0; //!!!
-//        while (l != null /*&& n < 1000*/) { //!!!
-//            out.println(l);
-//            l = in.readLine();
-//            //n++; //!!!
-//        }
-//        in.close();
-//
-////            in = new BufferedReader(new FileReader(sourcePath + "core-i18n/en/infobox_properties_unredirected_en.ttl"));
-////            l = in.readLine();
-////            while (l != null){
-////                out.println(l);
-////                l = in.readLine();
-////            }
-////            in.close();
-//        in = new BufferedReader(new FileReader(sourcePath + "core-i18n/en/mappingbased_objects_en.ttl"));
-//        l = in.readLine();
-//        while (l != null /*&& n < 2000*/) { //!!!
-//            out.println(l);
-//            l = in.readLine();
-//            //n++; //!!!
-//        }
-//        in.close();
-        }
-        /**
-         * @param args the command line arguments
-         */
+        out.close();
+    }
+
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         try {
             long start = System.currentTimeMillis();
             //String directory = "/home/lucia/nlp2sparql/dbpedia/2015-10/core-i18n/en";
             //SeoDwarfIndex dbpedia = new SeoDwarfIndex(args[0], args[1]);
-            SeoDwarfIndex dbpedia = new SeoDwarfIndex("/home/lucia/data/seodwarf/2018-07/", "/home/lucia/data/seodwarf/index/");
+            SeoDwarfIndex seodwarf = new SeoDwarfIndex("/home/lucia/Desktop/seodwarf_data_06_11_19/ontology_mod/", "/home/lucia/Desktop/seodwarf_data_06_11_19/output_mod/");
 
-            HashSet<String> classes = dbpedia.createClassParentsFile();
+            HashSet<String> classes = seodwarf.createClassParentsFile();
 
-            dbpedia.createClassLabelsFile(classes);
+            seodwarf.createClassLabelsFile(classes);
 
-            dbpedia.createPropertyLabelsFile();
+            seodwarf.createPropertyLabelsFile();
 
-            HashSet<String> entities = dbpedia.createEntityLabelsFile();
+            HashSet<String> entities = seodwarf.createEntityLabelsFile();
 
-            dbpedia.createEntityClassesFile(entities, classes);
+            seodwarf.createEntityClassesFile(entities, classes);
 
             //dbpedia.createBasicTypesLiteralTypesFile();
-            dbpedia.createTripleFile();
+            seodwarf.createTripleFile();
 
             System.out.println("Ended at " + new Date());
             long time = System.currentTimeMillis() - start;
