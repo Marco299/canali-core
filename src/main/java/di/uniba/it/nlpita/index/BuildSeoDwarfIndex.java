@@ -1280,13 +1280,10 @@ public class BuildSeoDwarfIndex {
             fn1 = args[0];
             fn2 = args[1];
         } else {
-            //fn1 = "/home/gaetangate/Dev/nlp2sparql-data/dbpedia-processed/2015-10/supportFiles/";
-            //fn2 = "/home/gaetangate/Dev/nlp2sparql-data/dbpedia-processed/2015-10/index/";
             fn1 = "./resource/seodwarf_res/index/supportFiles/";
             fn2 = "./resource/seodwarf_res/index/processed/";
         }
         long start = System.currentTimeMillis();
-        System.out.println("BUILD MINI INDEX");
         System.out.println("Started at " + new Date());
         new BuildSeoDwarfIndex(fn1, fn2).start();
         System.out.println("Ended at " + new Date());
