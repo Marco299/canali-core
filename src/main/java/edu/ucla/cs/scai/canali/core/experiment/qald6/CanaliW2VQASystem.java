@@ -372,7 +372,161 @@ public class CanaliW2VQASystem implements QASystem {
 				TranslationWrapper tWrapper = new TranslationService().translateQuery(acceptedTokens, endpoint, limit, disableSubclass);
 				System.out.println("twrapper: " + tWrapper.getQuery());
                                 ///!!! to remove (made for the seodwarf demo)
-                                SeoDwarfDemo.printQuery(tWrapper.getQuery());
+                                boolean bquery = false;
+                                if (bquery) {
+                                    SeoDwarfDemo.printQuery(tWrapper.getQuery());
+                                    answers.add(tWrapper.getQuery());
+                                    return answers;
+                                }
+                                ///
+
+				ResultWrapper rWrapper = new QueryService().answerQuery(acceptedTokens, endpoint, limit, disableSubclass);
+				//System.out.println("+++rWrapper query = \n"+ rWrapper.);
+				ArrayList<ResultObject> results = rWrapper.getResults();
+				if (results != null && results.size() > 0) {
+					for (ResultObject result : results) {
+						// System.out.println(result.getL() + " " + result.getUe() + " " + result.getU() + " " + result.getId() + " " + result.getIde());
+						if (result.getId() != null) {
+							answers.add(result.getId());
+						} else {
+							answers.add(result.getL());
+						}
+					}
+				} else {
+					answers.add(QASystem.EMPTY_RESULT);
+				}
+			} else {
+				answers.add(QASystem.EMPTY_RESULT);
+			}
+		} catch (Exception e) {
+			answers.add(QASystem.EMPTY_RESULT);
+			System.out.println(e);
+			e.printStackTrace();
+		}
+		return answers;
+	}
+        
+        
+        
+	public ArrayList<String> getQuery(String query, String answerType) {
+		System.out.println("Using CanaliW2V...");
+
+		ArrayList<String> answers = new ArrayList<String>();
+
+		String lastRemainder = null;
+		HashMap<Integer, ArrayList<String>> filteredPropertyMap = new HashMap<Integer, ArrayList<String>>();
+		HashMap<Integer, ArrayList<AutocompleteObject>> removedTokenMap = new HashMap<Integer, ArrayList<AutocompleteObject>>();
+
+		try {
+
+			String lastAcceptedProperty = null; //p
+			String[] openVariablesUri = null; //ou //!!!
+			Integer[] openVariablesPosition = null; //op  //!!!
+			String currentState = "0"; //s
+			String finalPunctuation = null; //f
+			boolean disableContextRules = false; //crd
+			boolean autoAcceptance = true; //aa
+			boolean dateToNumber = false; //dtn
+			boolean useKeywords = false; //k
+
+			boolean isEmpty = false;
+
+			removedTokenMap.put(0, new ArrayList<AutocompleteObject>());
+			ArrayList<AutocompleteObject> acceptedTokens = new AutocompleteW2VService().getAutocompleResults(query, lastAcceptedProperty, openVariablesUri, openVariablesPosition, currentState, finalPunctuation, disableContextRules, autoAcceptance, dateToNumber, useKeywords, removedTokenMap.get(0));
+			if (acceptedTokens == null) {
+				isEmpty = true;
+			} else {
+				lastRemainder = acceptedTokens.get(acceptedTokens.size() - 1).remainder;
+				removedTokenMap.get(0).add(acceptedTokens.get(0));
+			}
+			while (!query.equals(finalPunctuation) && !isEmpty) {
+				//System.out.println("nel while");
+				currentState = getCurrentState(acceptedTokens);
+				if (acceptedTokens.size() > 0) {
+					if ((acceptedTokens.get(acceptedTokens.size() - 1).state.equals(AutocompleteService.ACCEPT_OPERATOR_OR_DIRECT_OPERAND_STATE_S4) || acceptedTokens.get(acceptedTokens.size() - 1).state.equals(AutocompleteService.ACCEPT_DIRECT_OPERAND_STATE_S5)) && (acceptedTokens.get(acceptedTokens.size() - 1).labels.equals("year=") || acceptedTokens.get(acceptedTokens.size() - 1).labels.equals("month="))) {
+						dateToNumber = true;
+					}
+					String lastAcceptedPropertyNew = getLastAcceptedProperty(acceptedTokens);
+					if (lastAcceptedPropertyNew != null) {
+						lastAcceptedProperty = lastAcceptedPropertyNew;
+					}
+					boolean propertyHaving = acceptedTokens.size() > 2 && acceptedTokens.get(acceptedTokens.size() - 1).state.equals(AutocompleteService.ACCEPT_PROPERTY_FOR_CONSTRAINT_STATE_S3) && acceptedTokens.get(acceptedTokens.size() - 2).state.equals(AutocompleteService.ACCEPT_OPERATOR_OR_DIRECT_OPERAND_STATE_S4);
+					String[] openVariables = getOpenVariables(acceptedTokens, propertyHaving);
+					if (openVariables[0] != null && !openVariables[0].equals("")) { //!!!
+						//System.out.println("open variables [0]:" + openVariables[0]);
+
+						openVariablesUri = openVariables[0].split(",");
+						//System.out.println("open variables [2]:" + openVariables[2]);
+						if (!openVariables[2].equals("")) {
+
+							String[] intSplit = openVariables[2].split(",");
+							openVariablesPosition = new Integer[intSplit.length];
+							for (int i = 0; i < intSplit.length; i++) {
+								openVariablesPosition[i] = Integer.parseInt(intSplit[i]);
+							}
+
+						}
+					}
+					finalPunctuation = getFinalPunctuation(acceptedTokens);
+					//query = acceptedTokens.get(acceptedTokens.size() - 1).remainder; ///!!!
+					query = lastRemainder;
+				}
+				System.out.println("QUERY #1 = " + query);
+				if (removedTokenMap.get(acceptedTokens.size()) == null) {
+					removedTokenMap.put(acceptedTokens.size(), new ArrayList<AutocompleteObject>());
+				}
+				ArrayList<AutocompleteObject> newTokens = new AutocompleteW2VService().getAutocompleResults(query, lastAcceptedProperty, openVariablesUri, openVariablesPosition, currentState, finalPunctuation, disableContextRules, autoAcceptance, dateToNumber, useKeywords, removedTokenMap.get(acceptedTokens.size()));
+
+				if (newTokens != null && newTokens.size() > 0) {
+					System.out.println("newTokens = " + newTokens.get(0).text);
+					acceptedTokens.add(newTokens.get(0));
+					lastRemainder = acceptedTokens.get(acceptedTokens.size() - 1).remainder;
+					removedTokenMap.get(acceptedTokens.size() - 1).add(newTokens.get(0));
+				} else {
+
+					int currentTokenIndex = acceptedTokens.size();
+					lastRemainder = acceptedTokens.get(acceptedTokens.size() - 1).remainder;
+					String[] remainder = lastRemainder.split(" ");
+
+					if (filteredPropertyMap.get(currentTokenIndex) == null) {
+						filteredPropertyMap.put(currentTokenIndex, getMostSimilarPropertyList(remainder[0]));
+					}
+					if (!filteredPropertyMap.get(currentTokenIndex).isEmpty()) {
+						String nearProperty = filteredPropertyMap.get(currentTokenIndex).get(0);
+						filteredPropertyMap.get(currentTokenIndex).remove(0);
+						lastRemainder = lastRemainder.replace(remainder[0], nearProperty);
+					} else {
+                                                System.out.println("nell'else finale");
+						lastRemainder = acceptedTokens.get(acceptedTokens.size() - 1).remainder;
+						acceptedTokens.remove(currentTokenIndex - 1);
+						filteredPropertyMap.put(currentTokenIndex, null);
+
+					}
+
+					/*
+					 * TODO ricordarsi della condizione di empty
+					 */
+					if (acceptedTokens.isEmpty()) {
+						isEmpty = true;
+					}
+
+				}
+
+			}
+                        System.out.println("here");
+			if (!isEmpty) {
+				String endpoint = "default";
+				int limit = 100000;
+				boolean disableSubclass = true;
+				TranslationWrapper tWrapper = new TranslationService().translateQuery(acceptedTokens, endpoint, limit, disableSubclass);
+				System.out.println("twrapper: " + tWrapper.getQuery());
+                                ///!!! to remove (made for the seodwarf demo)
+                                boolean bquery = true;
+                                if (bquery) {
+                                    SeoDwarfDemo.printQuery(tWrapper.getQuery());
+                                    answers.add(tWrapper.getQuery());
+                                    return answers;
+                                }
                                 ///
 
 				ResultWrapper rWrapper = new QueryService().answerQuery(acceptedTokens, endpoint, limit, disableSubclass);

@@ -7,8 +7,8 @@ PREFIX rdfs:	<http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT DISTINCT ?var1 ?elabel ?eurl ?ans ?label ?url ?picture ?abstract 
 WHERE {
-	BIND(<http://seodwarf.eu/ontology/v1.0#POLY001> AS ?var1) .
-	?var1 <http://seodwarf.eu/ontology/v1.0#hasClass> ?ans . 
+	BIND(<http://seodwarf.eu/ontology/v1.0#61d7cca8-e8bd-4334-8ca2-d351a11d498b> AS ?var1) .
+	?var1 <http://seodwarf.eu/ontology/v1.0#hasPhenomenon> ?ans . 
 	OPTIONAL {?ans rdfs:label ?label. FILTER(!bound(?label) || LANG(?label) = "" || LANGMATCHES(LANG(?label), "en"))} . 
 	OPTIONAL {?ans dbpedia-owl:thumbnail ?picture}. 
 	OPTIONAL {?ans foaf:isPrimaryTopicOf ?url. FILTER(regex(?url,'^http://en.wikipedia.org/wiki/','i'))} . 

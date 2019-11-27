@@ -230,6 +230,7 @@ public class BuildSeoDwarfIndex {
             while (l != null && l.length() > 0) {
                 //StringTokenizer st = new StringTokenizer(l, "<> \t");
                 StringTokenizer st = new StringTokenizer(l, "\t");
+                System.out.println("tokens: " + st.countTokens());
                 String subject = st.nextToken();
                 System.out.println("SUBJECT: " + subject); 
                 String property = st.nextToken();
@@ -272,8 +273,8 @@ public class BuildSeoDwarfIndex {
                         }
                     } else if (value.startsWith("\"")) { //it is a String
                         nLiteralTriples.put(STRING, nLiteralTriples.get(STRING) + 1);
-                    } else { //it is a blanknode
-                        
+                    } else { //it is a blanknode //mod for seodwarf
+                        nLiteralTriples.put(STRING, nLiteralTriples.get(STRING) + 1);
                     }
                     n++;
                     if (n % 1000000 == 0) {
@@ -1280,8 +1281,8 @@ public class BuildSeoDwarfIndex {
             fn1 = args[0];
             fn2 = args[1];
         } else {
-            fn1 = "./resource/seodwarf_res/index/supportFiles/";
-            fn2 = "./resource/seodwarf_res/index/processed/";
+            fn1 = "/home/lucia/Desktop/seodwarf_data_06_11_19/output_mod/index/supportFiles/";
+            fn2 = "/home/lucia/Desktop/seodwarf_data_06_11_19/output_mod/index/processed/";
         }
         long start = System.currentTimeMillis();
         System.out.println("Started at " + new Date());

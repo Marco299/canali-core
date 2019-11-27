@@ -55,7 +55,7 @@ public class QueryService {
         }
         String endpoint = System.getProperty("sparql.endpoint");
         if (endpoint == null) {
-            DEFAULT_END_POINT = "http://dbpedia.org/sparql";//"http://mars.cs.ucla.edu:8890/sparql";
+            DEFAULT_END_POINT = "http://rdf.seo-dwarf.eu:8080/parliament/sparql";//"http://dbpedia.org/sparql";//"http://mars.cs.ucla.edu:8890/sparql";
         } else {
             DEFAULT_END_POINT = endpoint;
         }

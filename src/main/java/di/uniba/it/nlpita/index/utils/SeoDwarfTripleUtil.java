@@ -33,6 +33,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.rdf.model.impl.StatementImpl;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
@@ -72,11 +73,23 @@ public class SeoDwarfTripleUtil {
 
   public void modifyRDF (){
         HashMap<Integer,LinkedList<Triple>> map = new HashMap<Integer,LinkedList<Triple>>();
+        List<Statement> newLabelStatements = new ArrayList<>();
+        List<Statement> removeStatements = new ArrayList<>();
         for (StmtIterator prop = seodwarfModel.listStatements();prop.hasNext();){
             Statement pr = prop.next();
+            if (pr.getPredicate().toString().contains("hasIdentifier")){
+                Statement newst = ResourceFactory.createStatement(pr.getSubject(), RDFS.label, pr.getObject());
+                newLabelStatements.add(newst);
+            }
+            if (pr.getObject().toString().equals("")){
+                Statement newst = ResourceFactory.createStatement(pr.getSubject(), pr.getPredicate(), pr.getObject());
+                removeStatements.add(newst);
+            }
             if(pr.asTriple().getObject().isBlank()){
-                
                 count++;
+                if (count==34) {
+                int here = 5;
+                }
                 System.out.println(pr.asTriple().getObject().toString());
 
                 LinkedList<Triple> list = new LinkedList<Triple>();
@@ -92,6 +105,9 @@ public class SeoDwarfTripleUtil {
                 
             }
         }
+        
+        seodwarfModel.add(newLabelStatements);
+        seodwarfModel.remove(removeStatements);
         for(Integer i : map.keySet()){
             
             Resource nuova;
@@ -108,8 +124,10 @@ public class SeoDwarfTripleUtil {
                     String uri =s.getPredicate().getURI().split("#")[0];
                     String name = s.getPredicate().getURI().split("#")[1];
                     
-                    seodwarfModel.add(nuova.asResource(),seodwarfModel.getProperty(uri, name), s.getObject().toString().replaceAll("\"", ""));
-                    System.out.println(nuova+"->>>"+nuova.getProperty(seodwarfModel.getProperty(uri, name)));
+                   
+                        seodwarfModel.add(nuova.asResource(),seodwarfModel.getProperty(uri, name), s.getObject().toString().replaceAll("\"", ""));
+                        System.out.println(nuova+"->>>"+nuova.getProperty(seodwarfModel.getProperty(uri, name)));
+                   
                 }
             });
             
